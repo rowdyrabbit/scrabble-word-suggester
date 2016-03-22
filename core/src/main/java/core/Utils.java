@@ -77,13 +77,16 @@ public class Utils {
     }
 
     /**
-     * Writes a list of string to the index file.
+     * Writes a list of strings to the index file.
      *
      * @param index the list of strings
      * @throws IOException
      */
     public static void writeIndexWordsToFile(List<String> index) throws IOException {
-
+        Path path = Paths.get(INDEX_FILE);
+        if (!Files.exists(path)) {
+            Files.createFile(path);
+        }
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(INDEX_FILE), StandardCharsets.UTF_8))) {
             for (String s: index) {
