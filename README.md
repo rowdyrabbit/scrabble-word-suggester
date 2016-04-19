@@ -48,9 +48,7 @@ Performance Analysis
 
 ### Method
 
-I decided to use [JMH](http://openjdk.java.net/projects/code-tools/jmh/) to benchmark the `scrabble-suggester` implementation as 
-correctly and robustly writing benchmarks for small Java applications is difficult to do correctly. The way I have implemented 
-the JMH benchmark is as follows:
+I decided to use [JMH](http://openjdk.java.net/projects/code-tools/jmh/) to benchmark the `scrabble-suggester` implementation as correctly and robustly writing benchmarks for small Java applications is difficult to do correctly. The way I have implemented the JMH benchmark is as follows:
 
 1. Benchmark four different aspects of the application:
    - The loading of the index file into memory 
@@ -59,16 +57,13 @@ the JMH benchmark is as follows:
    - The time it takes to write the suggested words to the console output
    
 2. The structure of the benchmark is:
-Some state setup (in the `IndexState` class which is used by the search-only benchmark, this state setup is excluded from the benchmarking, 
-so we can test the in-memory searching in isolation.
+Some state setup (in the `IndexState` class which is used by the search-only benchmark, this state setup is excluded from the benchmarking, so we can test the in-memory searching in isolation.
 
-The three separate benchmarks are all run in `SingleShotTime` mode because this mode most accurately reflects the cold-start of the JVM 
-which is incurred every time the suggester is invoked.
+The three separate benchmarks are all run in `SingleShotTime` mode because this mode most accurately reflects the cold-start of the JVM which is incurred every time the suggester is invoked.
 
 Additionally, I wanted to test the performance of scrabble-suggester with different input parameters, so I chose the following two profiles:
 
-- A query string of 'E' with number of matches '106758'. This represents the largest number of suffix strings in the index, but is obviously an unrealistic use case given that a someone 
-  probably doesn't really want 106,758 results. This is to stress-test the code and get results for a worst case scenario.
+- A query string of 'E' with number of matches '106758'. This represents the largest number of suffix strings in the index, but is obviously an unrealistic use case given that a someone probably doesn't really want 106,758 results. This is to stress-test the code and get results for a worst case scenario.
 - A query string of 'AT' with number of matches '30'. This represents what is probably closer to an average search scenario.
 
 
@@ -89,9 +84,6 @@ Below is the output of the benchmark run:
 |SuggesterBenchmark.testSearchIndex_Regular |   ss |  10 |  83.899 |±  11.544 | ms/op |
 
 
-The time to load the index file into memory is around 150ms, and the time to perform the index searching is around 70ms. 
-The end to end run, which include   s reading the index into memory and then performing the search is around 250ms.
-What's interesting is that the variance between different input parameters isn't large except in the case of printing the output to the console, a difference of around 900ms which is significant,
-but given that a user of the scrabble-suggester is unlikely to want to retrieve thousands of results, then performance of normal usage parameters is acceptable.
+The time to load the index file into memory is around 150ms, and the time to perform the index searching is around 70ms. The end to end run, which includes reading the index into memory and then performing the search is around 250ms. What's interesting is that the variance between different input parameters isn't large except in the case of printing the output to the console, a difference of around 900ms which is significant, but given that a user of the scrabble-suggester is unlikely to want to retrieve thousands of results, then performance of normal usage parameters is acceptable.
 
 
